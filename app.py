@@ -206,11 +206,14 @@ def calc_leapseconds_from_gpstime(gps_datetime):
 
 #-----Page Configuration
 st.set_page_config(page_title="GPS Time Converter",
+	page_icon='🛰️',#satellite emoji
 	initial_sidebar_state="collapsed")
-
+#page_icon='⌛',#hourglass emoji
+#':sunrise_over_mountains:',
+	
 #---- Title 
-st.markdown('<h1 style="margin-bottom:0rem;margin-top:0rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
-st.write("")
+st.markdown('<h1 style="margin-bottom:0rem;margin-top:-2rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
+#st.write("")
 #st.markdown(f'<h3 style="margin-bottom:0rem;margin-top:0rem;text-align: center">Last update: Text to add</h3>', unsafe_allow_html=True)
 
 #----menu button invisible
@@ -349,7 +352,8 @@ with row5_col7:
 
 ######################################################################
 #---------------------------------#
-st.subheader("  ")
+#st.subheader("  ")
+st.write("")
 expander_bar = st.expander('About this app')
 expander_bar.markdown('''
 - **UTC Time**: (Coordinated Universal Time) is the world's time standard. Local times have their appropriate UTC offsets according to timezones.
