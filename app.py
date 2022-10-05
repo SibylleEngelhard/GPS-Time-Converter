@@ -229,8 +229,23 @@ datetime_limit = datetime.datetime.strptime("2030-12-31 23:59:59","%Y-%m-%d %H:%
 
 if "utc_time" not in st.session_state:
 	st.session_state.utc_time=datetime.datetime.utcnow().replace(microsecond=0)
+	#2st.session_state.utc_time=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+
 local_time_now=datetime.datetime.now().replace(microsecond=0)
-utc_difference=datetime.timezone(datetime.datetime.now().replace(microsecond=0)-datetime.datetime.utcnow().replace(microsecond=0))
+#2local_time_now=st.session_state.utc_time.astimezone()
+utc_difference=datetime.timezone(local_time_now-st.session_state.utc_time)
+
+utc_time2=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+st.write(f" utc time: {utc_time2}")
+
+# First we obtain de timezone info o some datatime variable    
+tz_info = utc_time2.tzinfo
+st.write(f" tz info: {tz_info}")
+lt_now=utc_time2.astimezone()
+st.write(f" lt now: {lt_now}")
+st.write("difference: "+lt_now.strftime("%z"))
+
+
 
 if "leapseconds" not in st.session_state:
 	st.session_state.leapseconds=calc_leapseconds_from_utctime(st.session_state.utc_time)
