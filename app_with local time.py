@@ -5,10 +5,8 @@ import time
 
 def update_utc_now():
 	st.session_state.utc_time=datetime.datetime.utcnow().replace(microsecond=0)
-	#st.session_state.utc_time=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
-
-	#st.session_state.sess_local_time_now=datetime.datetime.now().replace(microsecond=0)
-	#st.session_state.show_local_time=True
+	st.session_state.sess_local_time_now=datetime.datetime.now().replace(microsecond=0)
+	st.session_state.show_local_time=True
 	update_utc_and_to_gps()
 
 def update_utc_time_zero():
@@ -16,12 +14,12 @@ def update_utc_time_zero():
 	#st.session_state.utc_hour=st.session_state.utc_time.hour
 	#st.session_state.utc_minute=st.session_state.utc_time.minute
 	#st.session_state.utc_second=st.session_state.utc_time.second
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	update_utc_and_to_gps()
 
 def change_utc_day():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	beginning_of_month_utc_day=st.session_state.utc_time.replace(day=1)
 	daysofmonth_timedelta=datetime.timedelta(days=st.session_state.utc_day-beginning_of_month_utc_day.day)
 	st.session_state.utc_time=beginning_of_month_utc_day+daysofmonth_timedelta
@@ -29,7 +27,7 @@ def change_utc_day():
 
 def change_utc_month():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	dayerror=True
 	oneday_timedelta=datetime.timedelta(days=1)
 	while dayerror:
@@ -42,13 +40,13 @@ def change_utc_month():
 
 def change_utc_year():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	st.session_state.utc_time=st.session_state.utc_time.replace(year=st.session_state.utc_year)
 	update_utc_and_to_gps()
 
 def change_utc_hour():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	beginning_of_day_utc_hour=st.session_state.utc_time.replace(hour=00)
 	hoursofday_timedelta=datetime.timedelta(hours=st.session_state.utc_hour-beginning_of_day_utc_hour.hour)
 	st.session_state.utc_time=beginning_of_day_utc_hour+hoursofday_timedelta
@@ -56,7 +54,7 @@ def change_utc_hour():
 
 def change_utc_minute():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	beginning_of_hour_utc_minute=st.session_state.utc_time.replace(minute=00)
 	minutesofhour_timedelta=datetime.timedelta(minutes=st.session_state.utc_minute-beginning_of_hour_utc_minute.minute)
 	st.session_state.utc_time=beginning_of_hour_utc_minute+minutesofhour_timedelta
@@ -64,7 +62,7 @@ def change_utc_minute():
 
 def change_utc_second():
 	st.session_state.now_positive_leapsecond=False
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 	beginning_of_minute_utc_second=st.session_state.utc_time.replace(second=00) #utc datetime beginning of minute
 	beginning_of_utc_minute_leap_seconds=calc_leapseconds_from_utctime(beginning_of_minute_utc_second)#leapseconds at beginning of minute
 	beginning_of_minute_gps_time=beginning_of_minute_utc_second+datetime.timedelta(seconds=beginning_of_utc_minute_leap_seconds)
@@ -150,7 +148,7 @@ def update_gps_and_to_utc():
 		st.session_state.utc_second=st.session_state.utc_time.second
 		st.session_state.now_positive_leapsecond=False
 
-	#st.session_state.show_local_time=False
+	st.session_state.show_local_time=False
 
 
 def change_gps_dayofyear():
@@ -233,9 +231,9 @@ if "utc_time" not in st.session_state:
 	st.session_state.utc_time=datetime.datetime.utcnow().replace(microsecond=0)
 	#st.session_state.utc_time=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
 
-#local_time_now=datetime.datetime.now().replace(microsecond=0)
+local_time_now=datetime.datetime.now().replace(microsecond=0)
 #local_time_now=st.session_state.utc_time.astimezone()
-#utc_difference=datetime.timezone(local_time_now-st.session_state.utc_time)
+utc_difference=datetime.timezone(local_time_now-st.session_state.utc_time)
 
 #utc_time2=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
 #st.write(f" utc time: {utc_time2}")
@@ -270,10 +268,10 @@ if "utc_minute" not in st.session_state:
 if "utc_second" not in st.session_state:
 	st.session_state.utc_second=st.session_state.utc_time.second
 
-#if "show_local_time" not in st.session_state:
-#	st.session_state.show_local_time=True
-#if "sess_local_time_now" not in st.session_state:
-#	st.session_state.sess_local_time_now=local_time_now
+if "show_local_time" not in st.session_state:
+	st.session_state.show_local_time=True
+if "sess_local_time_now" not in st.session_state:
+	st.session_state.sess_local_time_now=local_time_now
 
 if "gps_total_seconds" not in st.session_state:
 	st.session_state.gps_total_seconds=round((st.session_state.gps_time-gps_beginning_epoch).total_seconds())
@@ -346,17 +344,17 @@ with row4_col6:
 row5_col1,row5_col2,row5_col3,row5_col4,row5_col5,row5_col6,row5_col7=st.columns([9,5,1,2,1,7,7])	
 with row5_col1:
 	placeholder_localtime=st.empty()
-	placeholder_localtime.write("&nbsp;")#if st.session_state.show_local_time:
-	#	local_time_now=st.session_state.sess_local_time_now
-	#	placeholder_localtime.write(f"Local Time ({utc_difference}) :")
-	#else:
-	#	placeholder_localtime.write("&nbsp;")
+	if st.session_state.show_local_time:
+		local_time_now=st.session_state.sess_local_time_now
+		placeholder_localtime.write(f"Local Time ({utc_difference}) :")
+	else:
+		placeholder_localtime.write("&nbsp;")
 	st.write("Leap Seconds at UTC Time:")	
 with row5_col2:
 	pl=st.empty()
-	#if st.session_state.show_local_time:
-	#	pl.write(f"{local_time_now.strftime('%H:%M:%S')}")
-	if st.session_state.now_positive_leapsecond:
+	if st.session_state.show_local_time:
+		pl.write(f"{local_time_now.strftime('%H:%M:%S')}")
+	elif st.session_state.now_positive_leapsecond:
 		pl.markdown("<small style='color: #f63366'>Leap second !!!<br></small>", unsafe_allow_html=True) 
 	else:
 		pl.write("&nbsp;")
@@ -374,6 +372,7 @@ st.write("")
 expander_bar = st.expander('About this app')
 expander_bar.markdown('''
 - **UTC Time**: (Coordinated Universal Time) is the world's time standard. Local times have their appropriate UTC offsets according to timezones.
+- **Time Now:**  Local date/time and corresponding UTC time are based on the setting of your PC clock.
 - **Leap seconds:**  To keep the UTC time synchronised with the Earth’s rotation, additional leap seconds are added or subtracted from time to time. Leap seconds are applied either on 31-December or 30-June. The last leap second was added on 31-December-2016 23:59:60   https://maia.usno.navy.mil/products/leap-second
 - **GPS Time**: The GPS system uses GPS time which was zero on 06-January-1980 00:00:00. GPS time does not include leap seconds and is currently (2022) ahead of UTC time by 18 seconds.
 - for problems and suggestions contact: s.engelhard@gmx.net
