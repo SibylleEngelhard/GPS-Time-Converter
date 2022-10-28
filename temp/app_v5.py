@@ -7,7 +7,6 @@ import pytz
 def change_timezone():
     st.session_state.selected_timezone_withoffset=st.session_state.selectbox_timezone
     st.session_state.selected_timezone=st.session_state.selected_timezone_withoffset[:st.session_state.selected_timezone_withoffset.index(" ")]
-   
     if st.session_state.selected_timezone != "UTC": 
         st.session_state.display_time=st.session_state.utc_time.astimezone(pytz.timezone(st.session_state.selected_timezone))
         st.session_state.show_local_time=True
@@ -16,24 +15,30 @@ def change_timezone():
         st.session_state.display_time=st.session_state.utc_time
     update_displaytime()
 
+def change_sort_option():
+    st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
+
 def change_time_utc_or_local():
     if st.session_state.selected_time=="UTC":
         st.session_state.show_local_time=False
         st.session_state.display_time=st.session_state.utc_time
     else:
+        st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
         if st.session_state.selected_timezone != "UTC": 
             st.session_state.show_local_time=True
             st.session_state.display_time=st.session_state.utc_time.astimezone(pytz.timezone(st.session_state.selected_timezone))
     update_displaytime()
 
 def update_displaytime():
-    st.session_state.display_day=st.session_state.display_time.day
-    st.session_state.display_month=st.session_state.display_time.strftime("%B")
-    st.session_state.display_year=st.session_state.display_time.year
-    st.session_state.display_hour=st.session_state.display_time.hour
-    st.session_state.display_minute=st.session_state.display_time.minute
-    if not st.session_state.now_positive_leapsecond:
-        st.session_state.utc_second=st.session_state.utc_time.second
+        st.session_state.display_day=st.session_state.display_time.day
+        st.session_state.display_month=st.session_state.display_time.strftime("%B")
+        st.session_state.display_year=st.session_state.display_time.year
+        st.session_state.display_hour=st.session_state.display_time.hour
+        st.session_state.display_minute=st.session_state.display_time.minute
+        if not st.session_state.now_positive_leapsecond:
+            st.session_state.utc_second=st.session_state.utc_time.second
+
+
 
 def update_display_time_now():
     st.session_state.utc_time=datetime.datetime.now(pytz.utc).replace(microsecond=0)
@@ -64,6 +69,7 @@ def change_display_month():
         except:
             st.session_state.display_time=st.session_state.display_time-oneday_timedelta
     st.session_state.utc_time=st.session_state.display_time.astimezone(pytz.utc)
+    #st.write(st.session_state.selected_timezone)
     update_displaytime_and_to_gps()
 
 def change_display_year():
@@ -121,7 +127,7 @@ def change_utc_second():
         st.session_state.gps_dayofweek=st.session_state.gps_time.strftime("%w")
         st.session_state.gps_seconds_per_week=int(st.session_state.gps_total_seconds%604800)
         st.session_state.gps_seconds_per_day=int(st.session_state.gps_total_seconds%86400)
-        #st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
+        st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
     else:
         st.session_state.now_positive_leapsecond=False
         update_displaytime_and_to_gps()
@@ -135,6 +141,11 @@ def update_displaytime_and_to_gps():
         row1_col1.warning("Datetime limit currently set to 31-December-2030")
         st.session_state.utc_time=datetime_limit
         st.session_state.display_time=st.session_state.utc_time.astimezone(pytz.timezone(st.session_state.selected_timezone))
+    
+    
+    st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
+    
+
     st.session_state.display_day=st.session_state.display_time.day
     st.session_state.display_month=st.session_state.display_time.strftime("%B")
     st.session_state.display_year=st.session_state.display_time.year
@@ -151,13 +162,16 @@ def update_displaytime_and_to_gps():
     st.session_state.gps_seconds_per_week=int(st.session_state.gps_total_seconds%604800)
     st.session_state.gps_seconds_per_day=int(st.session_state.gps_total_seconds%86400)
 
+
+
 def update_gps_and_to_utc():
     if st.session_state.gps_time<gps_beginning_epoch:
-        row1_col4.warning("GPS Time begins on 06-January-1980")
+        row1_col3.warning("GPS Time begins on 06-January-1980")
         st.session_state.gps_time=gps_beginning_epoch
     elif (st.session_state.gps_time-datetime.timedelta(seconds=calc_leapseconds_from_gpstime(st.session_state.gps_time)))>datetime_limit:
-        row1_col4.warning("Datetime limit currently set to 31-December-2030")
+        row1_col3.warning("Datetime limit currently set to 31-December-2030")
         st.session_state.gps_time=datetime_limit+datetime.timedelta(seconds=calc_leapseconds_from_gpstime(st.session_state.gps_time))
+
     st.session_state.gps_total_seconds=round((st.session_state.gps_time-gps_beginning_epoch).total_seconds())
     st.session_state.gps_dayofyear=int(st.session_state.gps_time.strftime("%j"))
     st.session_state.gps_year=st.session_state.gps_time.year
@@ -165,6 +179,7 @@ def update_gps_and_to_utc():
     st.session_state.gps_dayofweek=st.session_state.gps_time.strftime("%w")
     st.session_state.gps_seconds_per_week=int(st.session_state.gps_total_seconds%604800)
     st.session_state.gps_seconds_per_day=int(st.session_state.gps_total_seconds%86400)
+    st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
     st.session_state.leapseconds=calc_leapseconds_from_gpstime(st.session_state.gps_time)
     st.session_state.utc_time=st.session_state.gps_time-datetime.timedelta(seconds=st.session_state.leapseconds)
     st.session_state.display_time=st.session_state.utc_time.astimezone(pytz.timezone(st.session_state.selected_timezone))
@@ -173,6 +188,7 @@ def update_gps_and_to_utc():
     st.session_state.display_year=st.session_state.display_time.year
     st.session_state.display_hour=st.session_state.display_time.hour
     st.session_state.display_minute=st.session_state.display_time.minute
+    
     if st.session_state.gps_total_seconds in positive_leapseconds_list:
         st.session_state.utc_second=60
         st.session_state.now_positive_leapsecond=True
@@ -244,22 +260,22 @@ def calc_leapseconds_from_gpstime(gps_datetime):
     return lp
 
 def update_dict_timezones_with_offsets():
+    #pytz list of all common timezones, ca. 439:
+    common_timezones_list=pytz.common_timezones
     list_of_timezone_dicts=[]
     for tzname in common_timezones_list:
-        dict1={}
-        #each timezone gets added to dictionary together with offset
-        dict1["tzname"]=tzname
-        offset_timedelta=st.session_state.utc_time.astimezone(pytz.timezone(tzname)).utcoffset()
-        offset_float=offset_timedelta.total_seconds()/60/60 #float in hours
-        dict1["offset_float"]=offset_float
-        offset_hours=int(offset_float)
-        offset_minutes=abs(int((offset_float%1)*60))
-        offset_string="{:+02d}".format(offset_hours)+":"+"{:02d}".format(offset_minutes)
-        dict1["offset_string"]=offset_string
-        dict1["tzname_with_offset"]=tzname + " - UTC"+offset_string
-        list_of_timezone_dicts.append(dict1)
-    return list_of_timezone_dicts
+        offset_text=st.session_state.utc_time.astimezone(pytz.timezone(tzname)).strftime("%z")
+        offset_float=float(offset_text)/100
+        dict2={}
+        dict2["tzname"]=tzname
+        dict2["offset_float"]=offset_float 
+        #dict2["offset_string"]="UTC "+("{:+.2f}".format(offset_float)).replace(".",":")
+        dict2["tzname with offset"]=tzname + " - UTC"+("{:+.2f}".format(offset_float)).replace(".",":")
+        #each timezone gets added to dictionary together with offset formats:
+        list_of_timezone_dicts.append(dict2)
 
+    return list_of_timezone_dicts
+    
 
 #-----Page Configuration
 st.set_page_config(page_title="GPS Time Converter",
@@ -280,8 +296,7 @@ month_list=["January","February","March","April","May","June","July","August","S
 dayofweek_list=["0","1","2","3","4","5","6"]
 gps_beginning_epoch = datetime.datetime.strptime("1980-01-06 00:00:00","%Y-%m-%d %H:%M:%S").replace(tzinfo=datetime.timezone.utc)
 datetime_limit = datetime.datetime.strptime("2030-12-31 23:59:59","%Y-%m-%d %H:%M:%S").replace(tzinfo=datetime.timezone.utc)
-#pytz list of all common timezones, ca. 439:
-common_timezones_list=pytz.common_timezones
+
 
 
 #setting session states
@@ -331,7 +346,22 @@ if "gps_seconds_per_day" not in st.session_state:
     st.session_state.gps_seconds_per_day=int(st.session_state.gps_total_seconds%86400)
 
 
+######this must be done again for every time change!!!
+list_of_timezone_dicts=update_dict_timezones_with_offsets()
+timezone_list=[d["tzname with offset"] for d in list_of_timezone_dicts]#list for display in selectbox sorted by name
+#list of dictionaries is sorted by offset_float:
+list_of_timezone_dicts_sorted_offset = sorted(list_of_timezone_dicts, key=lambda d: d['offset_float']) 
+timezone_list_sorted_offset=[d["tzname with offset"] for d in list_of_timezone_dicts_sorted_offset]#list for display in selectbox sorted by offset
 
+
+
+common_timezones_lista=pytz.common_timezones
+for tzname in common_timezones_lista:
+    offset_text=st.session_state.utc_time.astimezone(pytz.timezone(tzname)).strftime("%z")
+    #st.write(tzname+"  "+offset_text)
+    o=st.session_state.utc_time.astimezone(pytz.timezone(tzname)).utcoffset()
+    offset_in_hours=o.total_seconds()/60/60
+    st.write(f"{tzname} - {o}  - {p}")
 
 row0_col1,row0_col2,row0_col3=st.columns([6,10,5])
 with row0_col1:
@@ -341,23 +371,16 @@ with row0_col1:
     st.write("&nbsp;") #space in order following rows don't move
 with row0_col3:
     if radiobuttontime=="Local Time":
-        sort_option=st.radio("Sort Timezone List",('by Name','by UTC offset'),key="sort_option")
+        sort_option=st.radio("Sort Timezone List",('by Name','by UTC offset'),key="sort_option",on_change=change_sort_option)
 with row0_col2:
     if radiobuttontime=="Local Time":
-        ######this must be done again for every time change!!!
-        list_of_timezone_dicts=update_dict_timezones_with_offsets()
-        timezone_list=[d["tzname_with_offset"] for d in list_of_timezone_dicts]#list for display in selectbox sorted by name
-        #list of dictionaries is sorted by offset_float:
-        list_of_timezone_dicts_sorted_offset = sorted(list_of_timezone_dicts, key=lambda d: d['offset_float']) 
-        timezone_list_sorted_offset=[d["tzname_with_offset"] for d in list_of_timezone_dicts_sorted_offset]#list for display in selectbox sorted by offset
-        filtered_list = list(filter(lambda list_of_timezone_dicts: list_of_timezone_dicts['tzname'] == st.session_state.selected_timezone, list_of_timezone_dicts))
-        st.session_state.selected_timezone_withoffset=filtered_list[0]["tzname_with_offset"]
-        st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
-        placeholder_selectbox_timezone=st.empty()
+        pl=st.empty()
+        if "selectbox_timezone" not in st.session_state:
+            st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
         if sort_option=="by Name":
-            placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list,key="selectbox_timezone",on_change=change_timezone)
+            pl.selectbox("Select Timezone:", timezone_list,key="selectbox_timezone",on_change=change_timezone)
         else:
-            placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list_sorted_offset,key="selectbox_timezone",on_change=change_timezone)
+            pl.selectbox("Select Timezone:", timezone_list_sorted_offset,key="selectbox_timezone",on_change=change_timezone)
 
 
 row1_col1,row1_col2,row1_col3,row1_col4=st.columns([5,4,3,6])
@@ -372,6 +395,7 @@ with row1_col2:
     if st.session_state.show_local_time:
         i=st.session_state.selected_timezone_withoffset.index(" ")
         text=st.session_state.selected_timezone_withoffset[i+3:]
+        #placeholder_showselectedoffset.markdown("<bold style='color: #f63366'>"+text+"</bold>", unsafe_allow_html=True) 
         placeholder_showselectedoffset.markdown(f'<h4 style="color: blue;margin-bottom:0rem;margin-top:-0.2rem;text-align: center">'+text+'</h4>', unsafe_allow_html=True)
 with row1_col4:
     st.markdown(f'<h2 style="margin-bottom:0rem;margin-top:-1rem;text-align: left">GPS Time</h2>', unsafe_allow_html=True)
@@ -438,6 +462,11 @@ with row5_col7:
     gps_seconds_per_day=st.number_input("Seconds of Day",key="gps_seconds_per_day",min_value=0,max_value=86400,on_change=change_gps_seconds_per_day)
 
 
+
+
+#row6_col1,row6_col2=st.columns([2,1])
+#st.write(st.session_state.utc_time)
+#st.write(st.session_state.display_time)
 
 ######################################################################
 #---------------------------------#
