@@ -422,7 +422,7 @@ if not st.session_state.mobile_version:
         st.number_input("GPS Year", key="gps_year",min_value=1980, max_value=2031, on_change=change_gps_year)
 
 
-    row3_col1,row3_col2,row3_col3,row3_col4,row3_col5,row3_col6,row3_col7=st.columns([5,5,5,4,7,3,1])   
+    row3_col1,row3_col2,row3_col3,row3_col4,row3_col5,row3_col6,row3_col7=st.columns([5,5,5,4,6,4,1])   
     with row3_col1:
         st.text(" ")
         st.text(" ")
@@ -473,7 +473,7 @@ if not st.session_state.mobile_version:
 #----- Mobile Version for smaller screens -----
 else:
     #---- Title 
-    st.markdown('<h1 style="margin-bottom:0rem;margin-top:0rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="margin-bottom:0rem;margin-top:-1rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
     st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
 
     st.checkbox("Change to Desktop Version", help="Change display to desktop version",on_change=change_version)
