@@ -7,7 +7,6 @@ import pytz
 def change_timezone():
     st.session_state.selected_timezone_withoffset=st.session_state.selectbox_timezone
     st.session_state.selected_timezone=st.session_state.selected_timezone_withoffset[:st.session_state.selected_timezone_withoffset.index(" ")]
-   
     if st.session_state.selected_timezone != "UTC": 
         st.session_state.display_time=st.session_state.utc_time.astimezone(pytz.timezone(st.session_state.selected_timezone))
         st.session_state.show_local_time=True
@@ -268,28 +267,8 @@ st.set_page_config(page_title="GPS Time Converter",
     page_icon='🛰️',#satellite emoji
     initial_sidebar_state="collapsed")
 
-#setting session states
-if "mobile_version" not in st.session_state:
-    st.session_state.mobile_version=False
-   
-
-#rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
-#with rowa_col1:
-    #---- Title 
-#    st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
-#    st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
-#with rowa_col3:
-#    if not st.session_state.mobile_version:
-#        ch1=st.checkbox("Mobile Version", help="Change display to mobile friendly version",on_change=change_version)
-#    else:    
-#        ch2=st.checkbox("Desktop Version", help="Change display to desktop version",on_change=change_version)
-  
-    
 #----menu button invisible
-#st.markdown(""" <style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}</style> """, unsafe_allow_html=True)
-
-#st.write(st.session_state.mobile_version)
-
+st.markdown(""" <style>#MainMenu {visibility: hidden;}footer {visibility: hidden;}</style> """, unsafe_allow_html=True)
 
 
 #setting variables
@@ -303,6 +282,8 @@ common_timezones_list=pytz.common_timezones
 
 
 #setting session states
+if "mobile_version" not in st.session_state:
+    st.session_state.mobile_version=False
 if "utc_time" not in st.session_state:
     st.session_state.utc_time=datetime.datetime.now(pytz.utc).replace(microsecond=0)
 if "display_time" not in st.session_state:
@@ -537,8 +518,6 @@ else:
     st.number_input("GPS Time (total seconds)",key="gps_total_seconds",min_value=0,on_change=change_gps_total_seconds)
     gps_seconds_per_week=st.number_input("Seconds of Week",key="gps_seconds_per_week",min_value=0,max_value=604800,on_change=change_gps_seconds_per_week)
     gps_seconds_per_day=st.number_input("Seconds of Day",key="gps_seconds_per_day",min_value=0,max_value=86400,on_change=change_gps_seconds_per_day)
-
-
 
 
 ######################################################################
