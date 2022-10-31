@@ -273,16 +273,16 @@ if "mobile_version" not in st.session_state:
     st.session_state.mobile_version=False
    
 
-rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
-with rowa_col1:
+#rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
+#with rowa_col1:
     #---- Title 
-    st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
-    st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
-with rowa_col3:
-    if not st.session_state.mobile_version:
-        ch1=st.checkbox("Mobile Version", help="Change display to mobile friendly version",on_change=change_version)
-    else:    
-        ch2=st.checkbox("Desktop Version", help="Change display to desktop version",on_change=change_version)
+#    st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
+#    st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
+#with rowa_col3:
+#    if not st.session_state.mobile_version:
+#        ch1=st.checkbox("Mobile Version", help="Change display to mobile friendly version",on_change=change_version)
+#    else:    
+#        ch2=st.checkbox("Desktop Version", help="Change display to desktop version",on_change=change_version)
   
     
 #----menu button invisible
@@ -351,9 +351,19 @@ if "gps_seconds_per_day" not in st.session_state:
 
 
 
-
-
+######################################################################
+#-------- Desktop Version ---------
 if not st.session_state.mobile_version:  
+
+    rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
+    with rowa_col1:
+        #---- Title 
+        st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
+        st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
+    with rowa_col3:
+     #   st.checkbox("Desktop Version", help="Change display to desktop version",on_change=change_version)
+        st.checkbox("Mobile Version", help="Please select if you use the app on a smaller screen",on_change=change_version)
+
 
     row0_col1,row0_col2,row0_col3=st.columns([6,10,5])
     with row0_col1:
@@ -380,10 +390,6 @@ if not st.session_state.mobile_version:
                 placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list,key="selectbox_timezone",on_change=change_timezone)
             else:
                 placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list_sorted_offset,key="selectbox_timezone",on_change=change_timezone)
-
-
-
-
 
 
     row1_col1,row1_col2,row1_col3,row1_col4=st.columns([5,4,3,6])
@@ -463,15 +469,19 @@ if not st.session_state.mobile_version:
     with row5_col7:
         gps_seconds_per_day=st.number_input("Seconds of Day",key="gps_seconds_per_day",min_value=0,max_value=86400,on_change=change_gps_seconds_per_day)
 
-
+######################################################################
+#----- Mobile Version for smaller screens -----
 else:
-    
+    #---- Title 
+    st.markdown('<h1 style="margin-bottom:0rem;margin-top:0rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
+    st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
+
+    st.checkbox("Change to Desktop Version", help="Change display to desktop version",on_change=change_version)
+ 
     radiobuttontime=st.radio("Convert to/from:", ("UTC","Local Time"),key="selected_time", on_change=change_time_utc_or_local, horizontal=True)
     if radiobuttontime=="UTC":
         st.session_state.show_local_time=False
-        #st.write("&nbsp;") #space in order following rows don't move
     if radiobuttontime=="Local Time":
-            ######this must be done again for every time change!!!
         list_of_timezone_dicts=update_dict_timezones_with_offsets()
         timezone_list=[d["tzname_with_offset"] for d in list_of_timezone_dicts]#list for display in selectbox sorted by name
         #list of dictionaries is sorted by offset_float:
@@ -482,17 +492,11 @@ else:
         st.session_state.selectbox_timezone=st.session_state.selected_timezone_withoffset
         placeholder_selectbox_timezone=st.empty()
         sort_option=st.radio("Sort Timezone List",('by Name','by UTC offset'),key="sort_option")
- 
-
         if sort_option=="by Name":
             placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list,key="selectbox_timezone",on_change=change_timezone)
         else:
             placeholder_selectbox_timezone.selectbox("Select Timezone:", timezone_list_sorted_offset,key="selectbox_timezone",on_change=change_timezone)
     
-        
-
-
-
     placeholder_title=st.empty()
     if not st.session_state.show_local_time:
         placeholder_title.markdown(f'<h2 style="margin-bottom:0rem;margin-top:-1rem;text-align: center">UTC</h2>', unsafe_allow_html=True)
@@ -507,11 +511,11 @@ else:
     st.number_input("Day",key="display_day",min_value=0,max_value=32,format="%02d",on_change=change_display_day)
     st.selectbox("Month", month_list, key="display_month",on_change=change_display_month)
     st.number_input("Year", key="display_year",min_value=1980, max_value=2030, on_change=change_display_year)
-    
-    st.write("Set Time:")
-    st.button("Now",key="but1",help="Set time to current time",on_click=update_display_time_now)
-    st.button("0:00:00",key="but2",help="Set time to 0:00:00",on_click=update_display_time_zero)
-    
+
+    #st.write("Set Time:")
+    st.button("Set Time to Now",key="but1",help="Set time to current time",on_click=update_display_time_now)
+    st.button("Set Time to 0:00:00",key="but2",help="Set time to 0:00:00",on_click=update_display_time_zero)
+
     st.number_input("Hours",key="display_hour",min_value=-1,max_value=24,format="%02d",on_change=change_display_hour)
     st.number_input("Minutes",key="display_minute",min_value=-1,max_value=60,format="%02d",on_change=change_display_minute)
     st.number_input("Seconds",key="utc_second",min_value=-1,max_value=61,format="%02d",on_change=change_utc_second)
