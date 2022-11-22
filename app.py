@@ -338,9 +338,14 @@ if not st.session_state.mobile_version:
 
     rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
     with rowa_col1:
-        #---- Title 
+        #---- Title and Description
         st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
         st.markdown('<h5 style="color:grey;margin-bottom:0rem;margin-top:-1rem;text-align: center">Convert between UTC/Local Time and GPS Time</h5>', unsafe_allow_html=True)
+        
+        #st.title('GPS Time Converter')
+        #st.text('Convert between UTC/Local Time and GPS Time')
+        
+
     with rowa_col3:
      #   st.checkbox("Desktop Version", help="Change display to desktop version",on_change=change_version)
         st.checkbox("Mobile Version", help="Please select if you use the app on a smaller screen",on_change=change_version)
