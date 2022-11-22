@@ -336,7 +336,7 @@ if "gps_seconds_per_day" not in st.session_state:
 #-------- Desktop Version ---------
 if not st.session_state.mobile_version:  
 
-    rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,3])
+    rowa_col1,rowa_col2,rowa_col3=st.columns([15,1,4])
     with rowa_col1:
         #---- Title and Description
         st.markdown('<h1 style="margin-bottom:0rem;margin-top:-4rem;text-align: center">GPS Time Converter</h1>', unsafe_allow_html=True)
