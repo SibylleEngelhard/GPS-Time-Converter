@@ -186,13 +186,13 @@ def change_utc_second():
 
 def update_displaytime_and_to_gps():
     if st.session_state.utc_time < gps_beginning_epoch:
-        col1_row1_c1.warning("GPS Time begins on 06-January-1980")
+        row0_col2.error("GPS Time begins on 06-January-1980", icon="⚠️")
         st.session_state.utc_time = gps_beginning_epoch
         st.session_state.display_time = st.session_state.utc_time.astimezone(
             pytz.timezone(st.session_state.selected_timezone)
         )
     elif st.session_state.utc_time > datetime_limit:
-        col1_row1_c1.warning("Datetime limit currently set to 31-December-2030")
+        row0_col2.error("Date limit currently set to 31-Dec-2030", icon="⚠️")
         st.session_state.utc_time = datetime_limit
         st.session_state.display_time = st.session_state.utc_time.astimezone(
             pytz.timezone(st.session_state.selected_timezone)
@@ -226,7 +226,7 @@ def update_displaytime_and_to_gps():
 
 def update_gps_and_to_utc():
     if st.session_state.gps_time < gps_beginning_epoch:
-        col2_row2_c2.warning("GPS Time begins on 06-January-1980")
+        row0_col2.error("GPS Time begins on 06-January-1980", icon="⚠️")
         st.session_state.gps_time = gps_beginning_epoch
     elif (
         st.session_state.gps_time
@@ -234,7 +234,7 @@ def update_gps_and_to_utc():
             seconds=calc_leapseconds_from_gpstime(st.session_state.gps_time)
         )
     ) > datetime_limit:
-        col2_row2_c2.warning("Datetime limit currently set to 31-December-2030")
+        row0_col2.error("Date limit currently set to 31-Dec-2030", icon="⚠️")
         st.session_state.gps_time = datetime_limit + datetime.timedelta(
             seconds=calc_leapseconds_from_gpstime(st.session_state.gps_time)
         )
@@ -772,7 +772,7 @@ expander_bar.markdown(
 - **UTC**: UTC (Coordinated Universal Time) is the primary time standard by which the world regulates clocks and time. Local times have their appropriate UTC offsets according to timezones.
 - **Local Time**: The Local time can be shown if the correct timezone is selected. Timezones can be selected from a list of all common and currently used time zones which are derived from the Python module **pytz** - https://pypi.org/project/pytz/
 - **Leap seconds:**  To keep UTC synchronised with the Earth’s rotation, additional leap seconds are added or subtracted from time to time. Leap seconds are applied either on 31-December or 30-June. The last leap second was added on 31-December-2016 23:59:60.   https://maia.usno.navy.mil/products/leap-second
-- **GPS Time**: The GPS system uses GPS time which was zero on 06-January-1980 00:00:00. GPS time does not include leap seconds and is currently (2022) ahead of UTC by 18 seconds.
+- **GPS Time**: The GPS system uses GPS time which was zero on 06-January-1980 00:00:00. GPS time does not include leap seconds and is currently (2023) ahead of UTC by 18 seconds.
 - for problems and suggestions contact: s.engelhard@gmx.net
 - last updated in 2023
 """
