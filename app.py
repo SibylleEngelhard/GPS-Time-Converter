@@ -44,17 +44,25 @@ def update_displaytime():
 
 def update_display_time_now():
     st.session_state.utc_time = datetime.datetime.now(pytz.utc).replace(microsecond=0)
-    st.session_state.display_time = st.session_state.utc_time.astimezone(
-        pytz.timezone(st.session_state.selected_timezone)
-    )
+    # added to correct error when changing from local time back to utc
+    if st.session_state.show_local_time:
+        st.session_state.display_time = st.session_state.utc_time.astimezone(
+            pytz.timezone(st.session_state.selected_timezone)
+        )
+    else:
+        st.session_state.display_time = st.session_state.utc_time
     update_displaytime_and_to_gps()
 
 
 def update_display_time_zero():
     st.session_state.display_time = st.session_state.display_time.replace(
         minute=00, hour=00, second=00
-    )
-    st.session_state.utc_time = st.session_state.display_time.astimezone(pytz.utc)
+    )    
+    # added to correct error when changing from local time back to utc
+    if st.session_state.show_local_time:
+        st.session_state.utc_time = st.session_state.display_time.astimezone(pytz.utc)
+    else:
+        st.session_state.utc_time = st.session_state.display_time    
     update_displaytime_and_to_gps()
 
 
@@ -156,9 +164,14 @@ def change_utc_second():
     st.session_state.utc_time = st.session_state.gps_time - datetime.timedelta(
         seconds=st.session_state.leapseconds
     )
-    st.session_state.display_time = st.session_state.utc_time.astimezone(
-        pytz.timezone(st.session_state.selected_timezone)
-    )
+    # added to correct error when changing from local time back to utc
+    if st.session_state.show_local_time:
+        st.session_state.display_time = st.session_state.utc_time.astimezone(
+            pytz.timezone(st.session_state.selected_timezone)
+        )
+    else:
+        st.session_state.display_time = st.session_state.utc_time
+
     if st.session_state.gps_total_seconds in positive_leapseconds_list:  ###leapsecond
         st.session_state.now_positive_leapsecond = True
         # function update_utc_and_to_gps is not called because in this case st.session_state.utc_seconds needs to stay at 60 and differs from utc_time
