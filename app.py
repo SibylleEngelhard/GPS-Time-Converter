@@ -594,8 +594,9 @@ with row0_col2:
                 key="selectbox_timezone",
                 on_change=change_timezone,
             )
-
-col1, col2 = st.columns([11, 8],gap="medium")
+# col1, col2 = st.columns([11, 8],gap="medium")
+# column width correct to display +- in number_inputs again in col 1 and 2
+col1, col2 = st.columns([12, 8],gap="medium")
 
 with col1:
     col1_row1_c1, col1_row1_c2 = st.columns([5, 4])
@@ -622,7 +623,7 @@ with col1:
                 + "</h4>",
                 unsafe_allow_html=True,
             )
-    col1_row2_c1, col1_row2_c2, col1_row2_c3 = st.columns([5, 6, 6])
+    col1_row2_c1, col1_row2_c2, col1_row2_c3 = st.columns(3)
     with col1_row2_c1:
         st.number_input(
             "Day",
@@ -716,7 +717,9 @@ with col2:
         unsafe_allow_html=True,
     )
     placeholder_col2error = st.empty()
-    col2_row2_c1, col2_row2_c2, col2_row2_c3, col2_row2_c4 = st.columns([1,10,10,1])
+    # column width correct to display +-
+    #col2_row2_c1, col2_row2_c2, col2_row2_c3, col2_row2_c4 = st.columns([1,10,10,1])
+    col2_row2_c2, col2_row2_c3  = st.columns(2)
     with col2_row2_c2:
         st.number_input(
             "GPS Day of Year",
@@ -788,7 +791,7 @@ expander_bar.markdown(
 - **Leap seconds:**  To keep UTC synchronised with the Earth’s rotation, additional leap seconds are added from time to time. Leap seconds are applied either on 31-December or 30-June. The last leap second was added on 31-December-2016 23:59:60.   https://www.cnmoc.usff.navy.mil/Our-Commands/United-States-Naval-Observatory/Precise-Time-Department/Global-Positioning-System/USNO-GPS-Time-Transfer/Leap-Seconds/
 - **GPS Time**: The GPS system uses GPS time which was zero on 06-January-1980 00:00:00. GPS time does not include leap seconds and is currently (January 2024) ahead of UTC by 18 seconds.
 - for problems and suggestions contact: s.engelhard@gmx.net
-- last updated in January 2024
+- last updated in June 2025
 """
 )
 # ---------------------------------#
